@@ -1,0 +1,24 @@
+{
+  "name": "nodejs_pro_nvm",
+  "version": "1.0.0",
+  "description": "node js nvm",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/manhnv2102/node_js_nvm.git"
+  },
+  "keywords": [
+    "nodejs",
+    "express",
+    "mongodb"
+  ],
+  "author": "zits.manhj",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/manhnv2102/node_js_nvm/issues"
+  },
+  "homepage": "https://github.com/manhnv2102/node_js_nvm#readme"
+}
