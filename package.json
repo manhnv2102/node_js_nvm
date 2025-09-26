@@ -20,5 +20,8 @@
   "bugs": {
     "url": "https://github.com/manhnv2102/node_js_nvm/issues"
   },
-  "homepage": "https://github.com/manhnv2102/node_js_nvm#readme"
+  "homepage": "https://github.com/manhnv2102/node_js_nvm#readme",
+  "dependencies": {
+    "express": "5.0.1"
+  }
 }
