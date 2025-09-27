@@ -1,8 +1,7 @@
 //const express = require("express");
 import express from "express";
 import "dotenv/config";
-import getConnection from "./config/database";
-import webRoutes from "./routes/web";
+import webRoutes from "routes/web";
 
 const app = express();
 const port = process.env.PORT || 8080;
@@ -21,8 +20,8 @@ app.use(express.static("public"));
 //config routes
 webRoutes(app);
 
-getConnection();
+//getConnection();
 
 app.listen(port, () => {
-  console.log(`My app listening on port ${port}`);
+  console.log(`My app listening on port xxx ${port}`);
 });

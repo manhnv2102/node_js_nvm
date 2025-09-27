@@ -12,12 +12,16 @@
 </head>
 
 <body>
-    <img src="/images/hoidanit.png">
+    <!-- <img src="/images/hoidanit.png"> -->
     <div style="margin: 25px;">
         <div style="display: flex; justify-content: space-between; align-items: center;">
-            <h1>List Users</h1>
+            <h1>List Users
+            </h1>
             <div>
-                <button class="btn btn-warning">Create a new user</button>
+                <a href="./create-user">
+
+                    <button class="btn btn-warning">Create a new user</button>
+                </a>
             </div>
         </div>
         <hr>
@@ -31,15 +35,32 @@
                     <th>Action</th>
                 </thead>
                 <tbody>
-                    <tr>
-                        <td>Alfreds Futterkiste</td>
-                        <td>Maria Anders</td>
-                        <td>Germany</td>
-                        <td>Germany</td>
-                        <td>
-                            <button class="btn btn-danger">Delete</button>
-                        </td>
-                    </tr>
+                    <% users.forEach( function (user) { %>
+                        <tr>
+                            <td>
+                                <%= user.id %>
+                            </td>
+                            <td>
+                                <%= user.name %>
+                            </td>
+                            <td>
+                                <%= user.email %>
+                            </td>
+                            <td>
+                                <%= user.address %>
+                            </td>
+                            <td>
+                                <div style="display: flex; gap: 10px;">
+                                    <form action="/handle-view-user/<%= user.id %>" method="get">
+                                        <button type="submit" class="btn btn-warning">View</button>
+                                    </form>
+                                    <form action="/handle-delete-user/<%= user.id %>" method="post">
+                                        <button type="submit" class="btn btn-danger">Delete</button>
+                                    </form>
+                                </div>
+                            </td>
+                        </tr>
+                        <% }) %>
                 </tbody>
             </table>
         </div>
