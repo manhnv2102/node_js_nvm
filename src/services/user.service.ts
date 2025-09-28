@@ -5,6 +5,10 @@ const getAllUsers = async () => {
   const users = await prisma.user.findMany();
   return users;
 };
+const getAllRoles = async () => {
+  const roles = await prisma.role.findMany();
+  return roles;
+};
 
 const handleCreateUser = async (
   fullName: string,
@@ -14,9 +18,11 @@ const handleCreateUser = async (
   // inser into database
   const newUser = await prisma.user.create({
     data: {
-      name: fullName,
-      email: email,
+      fullName: fullName,
+      username: email,
       address: address,
+      password: "",
+      accountType: "",
     },
   });
   //return result
@@ -42,9 +48,11 @@ const handleUpdateUser = async (
   const updated = await prisma.user.update({
     where: { id: +id },
     data: {
-      name: fullName,
-      email: email,
+      fullName: fullName,
+      username: email,
       address: address,
+      password: "",
+      accountType: "",
     },
   });
   return updated;
@@ -56,4 +64,5 @@ export {
   handleDeleteUser,
   handleViewUser,
   handleUpdateUser,
+  getAllRoles,
 };
