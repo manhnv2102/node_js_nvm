@@ -13,27 +13,27 @@ import {
   getAdminUserPage,
   getDashboardPage,
 } from "controllers/admin/dashboard.controller";
+import fileUploadMiddleware from "src/middleware/multer";
 const router = express.Router();
-const multer = require("multer");
-const upload = multer({ dest: "uploads/" });
-
 const webRoutes = (app: Express) => {
   //User
   router.get("/", getHomePage);
-  router.post("/handle-delete-user/:id", postDeleteUserPage);
-  router.get("/handle-view-user/:id", getViewUserPage);
-  router.post("/handle-update-user", postUpdateUserPage);
   //Admin
+  //CRUD User
   router.get("/admin", getDashboardPage);
   router.get("/admin/user", getAdminUserPage);
   router.get("/admin/create-user", getCreateUserPage);
-  // router.post("/admin/handle-create-user", postCreateUserPage);
   router.post(
     "/admin/handle-create-user",
-    upload.single("avatar"),
-    (req, res) => {
-      return res.send("ok");
-    }
+    fileUploadMiddleware("avatar"),
+    postCreateUserPage
+  );
+  router.get("/admin/view-user/:id", getViewUserPage);
+  router.post("/admin/delete-user/:id", postDeleteUserPage);
+  router.post(
+    "/admin/update-user",
+    fileUploadMiddleware("avatar"),
+    postUpdateUserPage
   );
 
   router.get("/admin/product", getAdminProductPage);

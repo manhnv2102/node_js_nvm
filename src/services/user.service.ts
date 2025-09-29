@@ -1,6 +1,11 @@
 import { prisma } from "config/client";
-import getConnection from "config/database";
+import { ACCOUNT_TYPE } from "config/constant";
+import bcrypt from "bcrypt";
+const saltRounds = 10;
 
+const hashPassword = async (plainText: string) => {
+  return await bcrypt.hash(plainText, saltRounds);
+};
 const getAllUsers = async () => {
   const users = await prisma.user.findMany();
   return users;
@@ -13,16 +18,23 @@ const getAllRoles = async () => {
 const handleCreateUser = async (
   fullName: string,
   email: string,
-  address: string
+  address: string,
+  phone: string,
+  avatar: string,
+  role: string
 ) => {
   // inser into database
+  const defaultPassword = await hashPassword("123456");
   const newUser = await prisma.user.create({
     data: {
       fullName: fullName,
       username: email,
       address: address,
-      password: "",
-      accountType: "",
+      password: defaultPassword,
+      accountType: ACCOUNT_TYPE.SYSTEM,
+      avatar: avatar,
+      phone: phone,
+      roleId: +role,
     },
   });
   //return result
@@ -42,17 +54,19 @@ const handleViewUser = async (id: string) => {
 const handleUpdateUser = async (
   id: string,
   fullName: string,
-  email: string,
-  address: string
+  phone: string,
+  role: string,
+  address: string,
+  avatar: string
 ) => {
   const updated = await prisma.user.update({
     where: { id: +id },
     data: {
       fullName: fullName,
-      username: email,
       address: address,
-      password: "",
-      accountType: "",
+      phone: phone,
+      roleId: +role,
+      ...(avatar !== undefined && { avatar: avatar }),
     },
   });
   return updated;
@@ -65,4 +79,5 @@ export {
   handleViewUser,
   handleUpdateUser,
   getAllRoles,
+  hashPassword,
 };
