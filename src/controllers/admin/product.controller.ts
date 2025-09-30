@@ -1,5 +1,10 @@
 import { Request, Response } from "express";
-import { createProduct } from "services/admin/product.service";
+import {
+  createProduct,
+  handleDeleteProduct,
+  handleUpdateProduct,
+  handleViewProduct,
+} from "services/admin/product.service";
 import { ProductSchema, TProductSchema } from "src/validation/product.schema";
 
 const getAdminCreateProduct = async (req: Request, res: Response) => {
@@ -59,5 +64,61 @@ const postAdminCreateProduct = async (req: Request, res: Response) => {
   );
   return res.redirect("/admin/product");
 };
+const getViewProductPage = async (req: Request, res: Response) => {
+  const { id } = req.params;
+  const product = await handleViewProduct(+id);
 
-export { getAdminCreateProduct, postAdminCreateProduct };
+  const factoryOptions = [
+    { name: "Apple (MacBook)", value: "APPLE" },
+    { name: "Asus", value: "ASUS" },
+    { name: "Lenovo", value: "LENOVO" },
+    { name: "Dell", value: "DELL" },
+    { name: "LG", value: "LG" },
+    { name: "Acer", value: "ACER" },
+  ];
+  const targetOptions = [
+    { name: "Gaming", value: "GAMING" },
+    { name: "Sinh viên - Văn phòng", value: "SINHVIEN-VANPHONG" },
+    { name: "Thiết kế đồ họa", value: "THIET-KE-DO-HOA" },
+    { name: "Mỏng nhẹ", value: "MONG-NHE" },
+    { name: "Doanh nhân", value: "DOANH-NHAN" },
+  ];
+
+  return res.render("admin/product/detail.ejs", {
+    product,
+    factoryOptions,
+    targetOptions,
+  });
+};
+
+const postUpdateProductPage = async (req: Request, res: Response) => {
+  const { id, name, price, detailDesc, shortDesc, quantity, factory, target } =
+    req.body as TProductSchema;
+  const image = req?.file?.filename ?? null;
+  await handleUpdateProduct(
+    +id,
+    name,
+    +price,
+    detailDesc,
+    shortDesc,
+    +quantity,
+    factory,
+    target,
+    image
+  );
+  return res.redirect("/admin/product");
+};
+
+const postDeleteProductPage = async (req: Request, res: Response) => {
+  const { id } = req.params;
+  await handleDeleteProduct(+id);
+  return res.redirect("/admin/product");
+};
+
+export {
+  getAdminCreateProduct,
+  postAdminCreateProduct,
+  postDeleteProductPage,
+  getViewProductPage,
+  postUpdateProductPage,
+};
