@@ -6,10 +6,16 @@ const saltRounds = 10;
 const hashPassword = async (plainText: string) => {
   return await bcrypt.hash(plainText, saltRounds);
 };
+
+const comparePassword = async (plainText: string, hashPassword: string) => {
+  return await bcrypt.compare(plainText, hashPassword);
+};
+
 const getAllUsers = async () => {
   const users = await prisma.user.findMany();
   return users;
 };
+
 const getAllRoles = async () => {
   const roles = await prisma.role.findMany();
   return roles;
@@ -80,4 +86,5 @@ export {
   handleUpdateUser,
   getAllRoles,
   hashPassword,
+  comparePassword,
 };
