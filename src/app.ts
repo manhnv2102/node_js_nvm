@@ -1,6 +1,6 @@
 //const express = require("express");
+/// <reference path="./types/index.d.ts"/>
 import express from "express";
-
 import "dotenv/config";
 import webRoutes from "src/routes/web";
 import initDatabase from "config/seed";
@@ -46,11 +46,22 @@ app.use(passport.initialize());
 app.use(passport.authenticate("session"));
 configPassportLocal();
 
+//config global
+app.use((req, res, next) => {
+  res.locals.user = req.user || null; // Pass user object to all views
+  next();
+});
+
 //config routes
 webRoutes(app);
 
 //seeding data
 initDatabase();
+
+//handle 404 not found
+app.use((req, res) => {
+  res.render("status/404.ejs");
+});
 
 app.listen(port, () => {
   console.log(`My app listening on port: ${port}`);

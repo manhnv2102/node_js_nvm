@@ -1,8 +1,8 @@
 import { prisma } from "config/client";
-import { getViewUserPage } from "controllers/admin/user.controller";
 import passport from "passport";
 import { Strategy as LocalStrategy } from "passport-local";
-import { comparePassword, handleViewUser } from "services/user.service";
+import { getUserWithByRole } from "services/client/auth.service";
+import { comparePassword } from "services/user.service";
 
 const configPassportLocal = () => {
   passport.use(
@@ -34,7 +34,7 @@ const configPassportLocal = () => {
           return callback(null, false, { message: `Invalid password` });
         }
 
-        return callback(null, user);
+        return callback(null, user as any);
       }
     )
   );
@@ -45,7 +45,7 @@ const configPassportLocal = () => {
 
   passport.deserializeUser(async function (user: any, callback) {
     const { id, username } = user;
-    const userInDB = await handleViewUser(id);
+    const userInDB = await getUserWithByRole(id);
     return callback(null, { ...userInDB });
   });
 };
