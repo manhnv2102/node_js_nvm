@@ -16,9 +16,13 @@ import {
 import fileUploadMiddleware from "src/middleware/multer";
 import {
   getCartPage,
+  getCheckOutPage,
   getProductPage,
+  getThanksPage,
   postAddProductToCart,
   postDeleteProductCart,
+  postHandleCartToCheckOut,
+  postPlaceOrder,
 } from "controllers/client/product.controller";
 import {
   getAdminCreateProduct,
@@ -58,6 +62,10 @@ const webRoutes = (app: Express) => {
   router.post("/add-product-to-cart/:id", postAddProductToCart);
   router.get("/cart", getCartPage);
   router.post("/delete-product-in-cart/:id", postDeleteProductCart);
+  router.post("/handle-cart-to-checkout", postHandleCartToCheckOut);
+  router.get("/checkout", getCheckOutPage);
+  router.post("/place-order", postPlaceOrder);
+  router.get("/tks", getThanksPage);
 
   //Admin
   //CRUD User
