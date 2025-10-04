@@ -1,4 +1,5 @@
 import { Request, Response } from "express";
+import { getOrderHistory } from "services/admin/product.service";
 import {
   addProductToCart,
   deleteProductInCart,
@@ -35,9 +36,12 @@ const getCartPage = async (req: Request, res: Response) => {
   const totalPrice = cartDetails
     ?.map((item) => +item.price * +item.quantity)
     ?.reduce((a, b) => a + b, 0);
+
+  const cartId = cartDetails.length ? cartDetails[0].cartId : 0;
   return res.render("client/products/cart.ejs", {
     cartDetails,
     totalPrice,
+    cartId,
   });
 };
 
@@ -71,9 +75,10 @@ const getCheckOutPage = async (req: Request, res: Response) => {
 const postHandleCartToCheckOut = async (req: Request, res: Response) => {
   const user = req.user;
   if (!user) return res.redirect("/login");
+  const { cartId } = req.body;
   const currentCartDetail: { id: string; quantity: string }[] =
     req.body?.cartDetails ?? [];
-  await updateCartDetailBeforeCheckOut(currentCartDetail);
+  await updateCartDetailBeforeCheckOut(currentCartDetail, cartId);
 
   return res.redirect("/checkout");
 };
@@ -81,13 +86,15 @@ const postPlaceOrder = async (req: Request, res: Response) => {
   const user = req.user;
   if (!user) return res.redirect("/login");
   const { receiverName, receiverAddress, receiverPhone, totalPrice } = req.body;
-  await handlePlaceOrder(
+
+  const message = await handlePlaceOrder(
     user.id,
     receiverName,
     receiverAddress,
     receiverPhone,
     +totalPrice
   );
+  if (message) res.redirect("/checkout");
   return res.redirect("/tks");
 };
 const getThanksPage = async (req: Request, res: Response) => {
@@ -95,6 +102,16 @@ const getThanksPage = async (req: Request, res: Response) => {
   if (!user) return res.redirect("/login");
 
   return res.render("client/products/thanks.ejs");
+};
+const getOrderHistoryPage = async (req: Request, res: Response) => {
+  const user = req.user;
+  if (!user) return res.redirect("/login");
+
+  const orders = await getOrderHistory(user.id);
+
+  return res.render("client/products/order.history.ejs", {
+    orders,
+  });
 };
 
 export {
@@ -106,4 +123,5 @@ export {
   postHandleCartToCheckOut,
   postPlaceOrder,
   getThanksPage,
+  getOrderHistoryPage,
 };

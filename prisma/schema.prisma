@@ -61,11 +61,11 @@ model Order {
   paymentStatus String
   paymentRef    String?
 
-  user   User @relation(fields: [userId], references: [id])
-  userId Int  @unique
-
+  user         User          @relation(fields: [userId], references: [id])
+  userId       Int
   orderDetails OrderDetail[]
 
+  @@index([userId])
   @@map("orders")
 }
 

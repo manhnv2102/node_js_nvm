@@ -64,10 +64,23 @@ const handleDeleteProduct = async (id: number) => {
 const getProductList = async () => {
   return await prisma.product.findMany();
 };
+
+const getOrderHistory = async (userId: number) => {
+  return await prisma.order.findMany({
+    where: { userId },
+    include: {
+      orderDetails: {
+        include: { products: true },
+      },
+    },
+  });
+};
+
 export {
   createProduct,
   getProductList,
   handleDeleteProduct,
   handleViewProduct,
   handleUpdateProduct,
+  getOrderHistory,
 };

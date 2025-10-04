@@ -8,6 +8,7 @@ import {
   postUpdateUserPage,
 } from "controllers/admin/user.controller";
 import {
+  getAdminOrderDetailPage,
   getAdminOrderPage,
   getAdminProductPage,
   getAdminUserPage,
@@ -17,6 +18,7 @@ import fileUploadMiddleware from "src/middleware/multer";
 import {
   getCartPage,
   getCheckOutPage,
+  getOrderHistoryPage,
   getProductPage,
   getThanksPage,
   postAddProductToCart,
@@ -27,6 +29,7 @@ import {
 import {
   getAdminCreateProduct,
   getViewProductPage,
+  postAddToCartFromDetailPage,
   postAdminCreateProduct,
   postDeleteProductPage,
   postUpdateProductPage,
@@ -66,6 +69,8 @@ const webRoutes = (app: Express) => {
   router.get("/checkout", getCheckOutPage);
   router.post("/place-order", postPlaceOrder);
   router.get("/tks", getThanksPage);
+  router.get("/order-history", getOrderHistoryPage);
+  router.post("/add-to-cart-from-detail-page/:id", postAddToCartFromDetailPage);
 
   //Admin
   //CRUD User
@@ -102,6 +107,7 @@ const webRoutes = (app: Express) => {
   );
 
   router.get("/admin/order", getAdminOrderPage);
+  router.get("/admin/order/:id", getAdminOrderDetailPage);
   app.use("/", isAdmin, router);
 };
 
